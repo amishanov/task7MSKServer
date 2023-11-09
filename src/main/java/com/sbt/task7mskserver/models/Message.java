@@ -4,9 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Data
 @AllArgsConstructor
@@ -16,5 +14,13 @@ public class Message {
     @Id
     @GeneratedValue
     private Long id;
+    @ManyToOne
+    private Dialog dialog;
     private String text;
+    private String nickname;
+    public Message(Dialog dialog, String text, String nickname) {
+        this.dialog = dialog;
+        this.text = text;
+        this.nickname = nickname;
+    }
 }

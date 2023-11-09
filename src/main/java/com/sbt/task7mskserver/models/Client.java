@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -16,6 +17,10 @@ public class Client {
     @GeneratedValue
     private Long id;
     private String nickname;
-    @ManyToMany
-    private Set<Dialog> dialogsList;
+    @ManyToMany(mappedBy = "clientSet", fetch = FetchType.EAGER)
+    private Set<Dialog> dialogsList = new HashSet<>();
+
+    public Client(String nickname) {
+        this.nickname = nickname;
+    }
 }

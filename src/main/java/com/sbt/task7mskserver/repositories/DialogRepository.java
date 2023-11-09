@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface DialogRepository extends JpaRepository<Dialog, Integer> {
+public interface DialogRepository extends JpaRepository<Dialog, Long> {
 }
