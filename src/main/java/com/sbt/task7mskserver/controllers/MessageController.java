@@ -2,6 +2,7 @@ package com.sbt.task7mskserver.controllers;
 
 import com.sbt.task7mskserver.dto.RequestMessageDTO;
 import com.sbt.task7mskserver.dto.RequestNotificationDTO;
+import com.sbt.task7mskserver.dto.ResponseMessageDTO;
 import com.sbt.task7mskserver.models.Client;
 import com.sbt.task7mskserver.models.Dialog;
 import com.sbt.task7mskserver.models.Message;
@@ -31,6 +32,7 @@ public class MessageController {
     ClientRepository clientRepository;
 
     //TODO точно перенести в отдельный сервис, слишком сложная бизнес логика (или просто сдаться уже и сделать по ТЗ)
+    //TODO рассмотреть полный перевод использования в моделях объектов в id'шники
 
     // Следите за руками: находим диалог, в который хотим добавить сообщение, если нет - и суда нет, если есть
     // - создаём новое соообщение для него.
@@ -55,11 +57,11 @@ public class MessageController {
         List<Notification> notificationSet = notificationRepository.findAllByDialog_Id(dialog.get().getId());
 
         // Убираем клиентов, которые не ещё не посмотрели сообщения из тех, на кого мы будем создавать уведомления
-        for (Notification notification: notificationSet) {
+        for (Notification notification : notificationSet) {
             clientSet.remove(notification.getClient());
         }
         // Создаём уведомления для всех клиентов диалога, у которых их нет
-        for(Client client: clientSet) {
+        for (Client client : clientSet) {
             Notification notification = new Notification(client, dialog.get());
             notificationRepository.save(notification);
         }
@@ -68,21 +70,26 @@ public class MessageController {
 
     /**
      * Получение всех сообщений диалога и удаление уведомлений по этому диалогу для пользователя, запросившего диалог
-     * @param dialogId диалог, для которого запрашиваются сообщения
+     *
+     * @param dialogId               диалог, для которого запрашиваются сообщения
      * @param requestNotificationDTO id клиента, запросившего диалог. Используется для отчистки уведомлений
      * @return
      */
     @GetMapping("/{dialogId}")
     @Transactional
-    public ResponseEntity<List<Message>> getMessagesByDialogId(@PathVariable Long dialogId,
-                                               @RequestBody RequestNotificationDTO requestNotificationDTO) {
+    public ResponseEntity<List<ResponseMessageDTO>> getMessagesByDialogId(@PathVariable Long dialogId,
+                                                                          @RequestBody RequestNotificationDTO requestNotificationDTO) {
         Optional<Dialog> dialog = dialogRepository.findById(dialogId);
         Optional<Client> client = clientRepository.findById(requestNotificationDTO.getClientId());
         if (dialog.isEmpty() || client.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ArrayList<>());
         }
+        List<Message> messages = messageRepository.findAllByDialog(dialog.get());
+        List<ResponseMessageDTO> response = new ArrayList<>();
+        for (Message message : messages)
+            response.add(new ResponseMessageDTO(message.getText(), message.getNickname()));
         notificationRepository.deleteByClient_AndDialog(client.get(), dialog.get());
-        return ResponseEntity.status(HttpStatus.FOUND).body(messageRepository.findAllByDialog(dialog.get()));
+        return ResponseEntity.status(HttpStatus.OK).body(response);
 
     }
 }

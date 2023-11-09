@@ -6,7 +6,6 @@ import com.sbt.task7mskserver.models.Notification;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
     List<Notification> findAllByClient_Id(Long id);

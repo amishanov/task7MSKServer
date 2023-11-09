@@ -1,24 +1,26 @@
 package com.sbt.task7mskserver.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-@Data
+@Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 public class Dialog {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @NonNull
+    @ManyToMany(fetch = FetchType.EAGER)
     private Set<Client> clientSet = new HashSet<>();
+    @NonNull
     @OneToMany(mappedBy = "dialog")
     private Set<Message> messages = new HashSet<>();
+
 }

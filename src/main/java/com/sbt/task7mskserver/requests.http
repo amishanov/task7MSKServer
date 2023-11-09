@@ -1,0 +1,81 @@
+POST http://localhost:8080/clients
+Content-Type: application/json
+
+{
+  "nickname": "user1"
+}
+
+###
+POST http://localhost:8080/clients
+Content-Type: application/json
+
+{
+  "nickname": "user2"
+}
+
+###
+GET http://localhost:8080/clients
+
+###
+POST http://localhost:8080/dialogs
+Content-Type: application/json
+
+{
+  "clientFromId": 1,
+  "clientToId": 2
+}
+
+###
+POST http://localhost:8080/messages
+Content-Type: application/json
+
+{
+  "dialogSessionId": 3,
+  "text": "Моё первое сообщение тебе <3",
+  "nickname": "user1"
+}
+
+###
+GET http://localhost:8080/notifications/1
+
+###
+GET http://localhost:8080/messages/3
+Content-Type: application/json
+
+{
+  "clientId": 2
+}
+
+###
+POST http://localhost:8080/clients
+Content-Type: application/json
+
+{
+  "nickname": "user3"
+}
+
+###
+POST http://localhost:8080/dialogs
+Content-Type: application/json
+
+{
+  "clientFromId": 2,
+  "clientToId": 7
+}
+
+###
+POST http://localhost:8080/messages
+Content-Type: application/json
+
+{
+  "dialogSessionId": 8,
+  "text": "Моё первое сообщение тебе <3 в диалоге 8",
+  "nickname": "user2"
+}
+
+###
+DELETE http://localhost:8080/dialogs/3
+
+###
+GET http://localhost:8080/clients/2
+

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -49,6 +50,7 @@ public class DialogController {
         Dialog dialog = new Dialog();
         dialog.setClientSet(clientSet);
         dialog = dialogRepository.saveAndFlush(dialog);
+        System.out.println(dialog);
         return ResponseEntity.status(HttpStatus.CREATED).body(dialog.getId());
     }
 
@@ -56,9 +58,9 @@ public class DialogController {
     @DeleteMapping("/{id}")
     @Transactional
     public ResponseEntity<Long> stopDialog(@PathVariable Long id) {
-        dialogRepository.deleteById(id);
         notificationRepository.deleteAllByDialog_Id(id);
         messageRepository.deleteAllByDialog_Id(id);
+        dialogRepository.deleteById(id);
         return ResponseEntity.ok(id);
     }
 }

@@ -8,7 +8,9 @@ import lombok.NonNull;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RequestNotificationDTO {
+public class ResponseMessageDTO {
     @NonNull
-    private Long clientId;
+    private String Text;
+    @NonNull
+    private String nickname;
 }
