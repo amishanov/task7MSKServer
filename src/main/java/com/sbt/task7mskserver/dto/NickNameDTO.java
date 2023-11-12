@@ -3,12 +3,13 @@ package com.sbt.task7mskserver.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
+
+import javax.validation.constraints.NotBlank;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RequestNotificationDTO {
-    @NonNull
-    private Long clientId;
+public class NickNameDTO {
+    @NotBlank
+    String nickname;
 }

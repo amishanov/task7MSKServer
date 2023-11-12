@@ -1,37 +1,34 @@
 package com.sbt.task7mskserver.controllers;
 
-import com.sbt.task7mskserver.dto.ResponseNotificationDTO;
-import com.sbt.task7mskserver.models.Client;
+import com.sbt.task7mskserver.dto.IdDTO;
 import com.sbt.task7mskserver.models.Notification;
-import com.sbt.task7mskserver.repositories.ClientRepository;
-import com.sbt.task7mskserver.repositories.NotificationRepository;
+import com.sbt.task7mskserver.services.NotificationService;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @AllArgsConstructor
 @RequestMapping("/notifications")
 public class NotificationController {
-    NotificationRepository notificationRepository;
-    ClientRepository clientRepository;
+    NotificationService notificationService;
 
+    /**
+     * Возвращает список уведомлений для клиента
+     * @param clientId - id клиента, который запросил уведомления
+     * @return OK и список уведомлений или же NOT FOUND если клиент не присутствует в системе
+     */
     @GetMapping("/{clientId}")
     @Transactional
-    public ResponseEntity<List<ResponseNotificationDTO>> getUpdatesForMe(@PathVariable Long clientId) {
-        Optional<Client> client = clientRepository.findById(clientId);
-        if (client.isEmpty())
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ArrayList<>());
-        List<Notification> notifications = notificationRepository.findAllByClient_Id(clientId);
-        List<ResponseNotificationDTO> response = new ArrayList<>();
+    public ResponseEntity<List<IdDTO>> getUpdatesForMe(@PathVariable Long clientId) {
+        List<Notification> notifications = notificationService.getUpdatesForMe(clientId);
+        List<IdDTO> response = new ArrayList<>();
         for(Notification notification: notifications)
-            response.add(new ResponseNotificationDTO(notification.getDialog().getId()));
+            response.add(new IdDTO(notification.getDialog().getId()));
         return ResponseEntity.ok(response);
     }
 }

@@ -3,7 +3,6 @@ package com.sbt.task7mskserver.models;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,13 +13,14 @@ import java.util.Set;
 @Entity
 public class Dialog {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NonNull
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     private Set<Client> clientSet = new HashSet<>();
-    @NonNull
-    @OneToMany(mappedBy = "dialog")
+    @OneToMany(mappedBy = "dialog", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Message> messages = new HashSet<>();
+    @OneToMany(orphanRemoval = true)
+    @JoinColumn(name = "dialog_id")
+    private Set<Notification> notifications = new HashSet<>();
 
 }

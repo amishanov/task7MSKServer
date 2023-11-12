@@ -11,10 +11,8 @@ import javax.persistence.*;
 @Entity
 public class Notification {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-//    private Integer newMessagesCount; Можно добавить, но сложно логику под это писать
-//    (работа с существующими уведомлениями + создание новых)
     @ManyToOne
     private Client client;
     @OneToOne

@@ -2,15 +2,17 @@ package com.sbt.task7mskserver.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import javax.validation.constraints.NotBlank;
 
+/**
+ * DTO для отправки списка сообщений из выбранного диалога
+ * Отличие от MessageDTO - отсутствие ID, поскольку тот передаётся через строку
+ */
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
 public class ResponseMessageDTO {
-    @NonNull
+    @NotBlank
     private String Text;
-    @NonNull
+    @NotBlank
     private String nickname;
 }
