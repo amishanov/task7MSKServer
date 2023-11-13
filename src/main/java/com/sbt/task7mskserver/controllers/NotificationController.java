@@ -18,9 +18,9 @@ public class NotificationController {
     NotificationService notificationService;
 
     /**
-     * Возвращает список уведомлений для клиента
+     * Возвращает список id диалогов, в которых есть непросмотренные сообщения для клиента
      * @param clientId - id клиента, который запросил уведомления
-     * @return OK и список уведомлений или же NOT FOUND если клиент не присутствует в системе
+     * @return OK и список Id диалогов с уведомлениями или же NOT FOUND если клиент не присутствует в системе
      */
     @GetMapping("/{clientId}")
     @Transactional
